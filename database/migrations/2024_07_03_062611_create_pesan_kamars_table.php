@@ -1,0 +1,36 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('pesan_kamars', function (Blueprint $table) {
+            $table->id();
+            $table->bigInteger('id_kamar')->unsigned();
+            $table->bigInteger('id_pasien')->unsigned();
+            $table->dateTime('tanggal_checkin');
+            $table->dateTime('tanggal_checkout')->nullable();
+            $table->timestamps();
+        });
+
+        Schema::table('pesan_kamars', function(Blueprint $table) {
+            $table->foreign('id_kamar')->references('id')->on('kamar_pasiens')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('id_pasien')->references('id')->on('pasiens')->onDelete('cascade')->onUpdate('cascade');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('pesan_kamars');
+    }
+};
